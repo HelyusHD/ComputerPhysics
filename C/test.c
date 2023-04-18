@@ -1,6 +1,10 @@
 // how to upload the file to my uni account
 // scp C:\Users\ing-b\Documents\VisualStudioCodeProgramms\LUA\CC\test.c s6anthul@cip-pool.physik.uni-bonn.de:~/Documents/
 
+
+
+//just a test
+
 //compile a c program
 // gcc -Wall -pedantic name.c -o FileName
 
