@@ -14,7 +14,7 @@
 
 //just a test
 
-//#include <stdio.h> // #include imports lib
+#include <stdio.h> // #include imports lib
 double square(double zahl){
     return zahl*zahl; // ; is needed to define end of command, in this case the return command
 }
