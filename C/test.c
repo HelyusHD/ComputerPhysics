@@ -7,7 +7,7 @@
 // man gcc == hekp page related to gcc 
 
 //compile a c program
-// gcc -Wall -pedantic name.c -o FileName
+// gcc -Wall -pedantic name.c -o FileName -lm
 // add a "-lm" to add a math library
 
 //execute a file
@@ -23,6 +23,6 @@ double square(double zahl){
 int main(int argc, char **argv){ // char = element from string ; argc == count of arguments from the call of this programm, like "./ProgramName FirstInput SecondInput" => argc would = 3
     printf("hello world\n");
     double a=0.5;
-    printf("Das Quadrat von %f ist %f\n", a, square(a)); // %f is a placeholder and the first cronological %f is replaced with the first following argument
+    fprintf("Das Quadrat von %f ist %f\n", a, square(a)); // %f is a placeholder and the first cronological %f is replaced with the first following argument
     return 0;
 }
