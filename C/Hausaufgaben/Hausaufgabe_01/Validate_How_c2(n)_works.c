@@ -7,22 +7,22 @@
 #include <math.h>
 
 
-    double c2(unsigned int r){
+    void c2(unsigned int r){
+        //double * y = (double *)malloc ( r * r * sizeof(double) );
         for ( unsigned int i =0 ; i<=r ; i++){
             for ( unsigned int j=0 ; j<=r ; j++){
                 if (i*i + j*j == r){
-                    
+                    fprint("pair found: i = %i j = %i " , i , j);
                 }
             }
         }
-        return 0;
     }
 
 
 
 
 int main(int argc, char **argv){
-    
-    c2(argv[1]);
 
+    c2(argv[1]);
+    return 0;
 }
