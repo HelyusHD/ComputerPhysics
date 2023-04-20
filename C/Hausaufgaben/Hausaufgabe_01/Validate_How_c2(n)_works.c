@@ -2,6 +2,9 @@
 // We want to calculate the number of points inside a radius "r" if points are spaced evenly with distance = 1
 
 #include <stdio.h> // #include imports lib
+#include <stdlib.h>
+#include <string.h>  /* speziell für Funktion memset () */
+#include <math.h>
 
 
     double c2(unsigned int r){
