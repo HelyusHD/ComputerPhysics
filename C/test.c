@@ -22,7 +22,10 @@ double square(double zahl){
 
 int main(int argc, char **argv){ // char = element from string ; argc == count of arguments from the call of this programm, like "./ProgramName FirstInput SecondInput" => argc would = 3
     printf("hello world\n");
-    double a=0.5;
-    fprintf("Das Quadrat von %f ist %f\n", a, square(a)); // %f is a placeholder and the first cronological %f is replaced with the first following argument
+    //Deklaration einer Variablen
+    double a=5.0;
+    
+    //Funktionsaufruf und Ausgabe
+    printf("Das Quadrat von %f ist %f\n", a, square(a)); // %f is a placeholder and the first cronological %f is replaced with the first following argument
     return 0;
 }
