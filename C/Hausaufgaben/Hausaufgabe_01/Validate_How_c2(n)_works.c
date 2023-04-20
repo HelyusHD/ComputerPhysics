@@ -23,8 +23,7 @@
 int main(int argc, char **argv){
 
     unsigned int a ;
-    //a = (unsigned int) argv[1];
-    a = (unsigned int) 16;
+    a = atof (argv[1]);  // atof is a function which can change from a typ string into an intager typ 
     fprintf(stderr, "Here we have all points inside a circle with radius %f \n", sqrt(a));
     for (int i=0 ; i<=a ; i++){
         fprintf(stderr, "----- C2(%d) -----\n",i);
