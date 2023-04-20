@@ -1,6 +1,6 @@
 // how to upload the file to my uni account
 // scp C:\Users\ing-b\Documents\VisualStudioCodeProgramms\LUA\CC\test.c s6anthul@cip-pool.physik.uni-bonn.de:~/Documents/
-//scp C:\Users\ing-b\Documents\Git\ComputerPhysics\C\Präsensaufgaben\Aufgabe_01\Ai.c s6anthul@cip-pool.physik.uni-bonn.de:~/Documents/
+// scp C:\Users\ing-b\Documents\Git\ComputerPhysics\C\Präsensaufgaben\Aufgabe_01\Ai.c s6anthul@cip-pool.physik.uni-bonn.de:~/Documents/
 
 // how to open the manuel:
 // man <function I want to know smth about>
