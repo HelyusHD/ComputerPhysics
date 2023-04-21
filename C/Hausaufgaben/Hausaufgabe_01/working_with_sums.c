@@ -15,7 +15,8 @@ double sum(int data[], int length);// this is a superior way to define function,
 **********************************************************/
 int main(){
     int test[] = {1,2,3,4,5,6,7,8,9,0}; 
-    fprintf(stdout, "The sum equals to: %f\n", sum(test,10));
+    a = (int)sum(test,10) // trying to cast sum as an int
+    fprintf(stdout, "The sum equals to: %d\n", a);
     return 0;
 }
 
