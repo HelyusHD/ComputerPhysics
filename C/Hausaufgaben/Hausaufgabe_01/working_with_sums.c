@@ -1,5 +1,12 @@
 // i want to try out some ways to make recursive sums in C
 
+/**********************************************************
+ * things i want to try out
+ * -> reading datasets as input
+ * -> making more complex sum functions
+ * -> implementing in other programms
+**********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
