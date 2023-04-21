@@ -1,4 +1,4 @@
-//scp 'C:\Users\andre\Documents\Git\ComputerPhysics\C\Hausaufgaben\Hausaufgabe_01\Validate_How_c2(n)_works.c' s6anthul@cip-pool.physik.uni-bonn.de:~/Documents/
+
 
 // We imagine a 2d letice
 // We want to calculate the number of points inside a radius "r" if points are spaced evenly with distance = 1
