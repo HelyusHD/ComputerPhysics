@@ -10,7 +10,7 @@ int main(int argc, char **argv){
 
     unsigned int a ;
     a = atof (argv[1]);  // atof is a function which can change from a typ string into an intager typ 
-    fprintf(stderr, "Here we have all points inside a circle with radius %f \n", sqrt(a));
+    fprintf(stderr, "Here we have all points inside a circle with radius %f \n", a);
     for (int i=0 ; i<=a ; i++){
         fprintf(stderr, "----- cube(%d) -----\n",i);
         cube(i);
@@ -24,10 +24,10 @@ unsigned int anzahl[4]={0,0,0,0}; // anzahl[1]*1, anzahl[2]*1/2, anzahl[3]*1/4, 
 for( int j = -n ; j <= n ; j++ ){   
     for( int k = -n ; k <= n ; k++ ){   
         for( int l = -n ; l <= n ; l++ ){
-            if(j != k && j != l && k != l); anzahl[1] += 1;
-            if(j = k && j != l && k != l); anzahl[2] += 1;
-            if(j = k && j = l && k != l); anzahl[3] += 1;
-            if(j = k && j = l && k = l); anzahl[4] += 1;
+            if(j != k && j != l && k != l) anzahl[1] += 1;
+            if((j == k && j != l) || (j == l && j != k) || (k == l && k != j)) anzahl[2] += 1;
+            if((j == k && j == l)) anzahl[3] += 1;
+            if(j == k && j == l) anzahl[4] += 1;
             }
         }
     }
