@@ -94,8 +94,17 @@ double square(int n){
             if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;}
             SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
     }
-    // -x,y are missing so we only iterated half the cube
-    return 2 * SurfacePotential;
+    x = -n;
+    for (int y=-n ; y<=n ; y++){
+        if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+        SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+    }
+    y = -n;
+    for (int x=-n+1 ; x<=n-1 ; x++){
+            if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;}
+            SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+    }
+    return SurfacePotential;
 }
 
 
@@ -126,7 +135,7 @@ int main(int argc, char **argv){
     fprintf(stderr,"Now we will use a flat cube aka square with the same amount of iterations to calculate the constant.");
     VolumePotential = 0;
     int g;
-    for (int m=0 ; m<= n ; m++){
+    for (int m=1 ; m<= n ; m++){
         VolumePotential += square(m);//sums all the charges potential on the squares circumferences
         if(n%100 == 0){fprintf(stderr,"iterated %d cubes\ndifference to litrature value = %f\n",n,fabs(MadelungConstNaCl-VolumePotential));}
         g = m;
