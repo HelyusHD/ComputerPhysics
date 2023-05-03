@@ -17,12 +17,12 @@
 
 
 double cube(unsigned int n){ // Funktion cube nimmt eine bestimmte Seitenlaenge n und gibt die Anzahl an Mittel-, Seiten-, Kanten- und Eckpunkten zurück
-    double* SurfacePotential = malloc(sizeof(double));
-    SurfacePotential = 0;
+    //double* SurfacePotential = malloc(sizeof(double));
+    double SurfacePotential = 0;
     int* Vector3 = malloc(3 * sizeof(int));
     memset(Vector3, 0, 3 * sizeof(int));
     int* p = malloc(9 * sizeof(int));
-    p[0]=1;p[1]=2;p[2]=3;p[3]=2;p[4]=3;p[5]=1;p[6]=3;p[7]=1;p[8]=2; // pairings for x y z which are used to compact the process of summing up points on the cubes surface
+    p[0]=0;p[1]=1;p[2]=2;p[3]=0;p[4]=1; // pairings for x y z which are used to compact the process of summing up points on the cubes surface
     int sign = 1;
     for (unsigned int i = 0 ; i<=3 ; i++){
         Vector3[p[i]] = n;
@@ -30,14 +30,19 @@ double cube(unsigned int n){ // Funktion cube nimmt eine bestimmte Seitenlaenge 
             for ( Vector3[p[i+1]] = 0 ; Vector3[p[i+1]] <= n ; Vector3[p[i+1]]++){
                 if (Vector3[p[i+1]]%2 == 1){sign = -sign;} 
                 for ( Vector3[p[i+2]] = 0 ; Vector3[p[i+2]] <= n-1 ; Vector3[p[i+2]]++){
-                    if (Vector3[p[i+2]]%2 == 1){sign = -sign;} 
-                    *SurfacePotential = *SurfacePotential + sign * sqrt(Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2] + Vector3[3] * Vector3[3]);
+                    if (Vector3[p[i+2]]%2 == 1){sign = -sign;}
+                    fprintf(stderr, "i,x,y,z = %d %d %d %d\n",i,Vector3[0],Vector3[1],Vector3[2]); 
+                    fprintf(stderr,"SurfacePotential = %f + %f\n",SurfacePotential,sign / sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
+                    SurfacePotential = SurfacePotential + (sign / sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
+                    fprintf(stderr,"SurfacePotential = %f\n",SurfacePotential);
+                    //fprintf(stderr, "x,y,z = %d %d %d SurfacePotential = %f\n",Vector3[0],Vector3[1],Vector3[2], SurfacePotential);
+                    //fprintf(stderr, "sign = %d   squrt = %f\n",sign, sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
                 }
             }
             if (n%2 == 1){sign = -1;}  else {sign = 1;}
-            *SurfacePotential = 8 * (*SurfacePotential - sign * 2 * sqrt(3 * n * n));
+            SurfacePotential = SurfacePotential + sign / sqrt(3 * n * n);
     }
-    return *SurfacePotential;
+    return 8 * SurfacePotential;
 }
 
 int main(int argc, char **argv){ 
@@ -45,7 +50,7 @@ int main(int argc, char **argv){
     fprintf(stderr, "Fuer den Wuerfel mit der Seitenlaenge %d finden wir folgende Punkte. \n", sidelenght);
     //double* VolumePotentioal = malloc(sizeof(double));
     double VolumePotentioal = 0;
-    for (unsigned int n=0 ; n<=sidelenght ; n++){
+    for (unsigned int n=1 ; n<=sidelenght ; n++){
         VolumePotentioal = VolumePotentioal + cube(n);//sums 
     }
     fprintf(stderr,"the total potential sum = %f\n", VolumePotentioal);
