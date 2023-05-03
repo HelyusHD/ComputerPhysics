@@ -16,39 +16,61 @@
 
 
 
-double cube(unsigned int n){ // Funktion cube nimmt eine bestimmte Seitenlaenge n und gibt die Anzahl an Mittel-, Seiten-, Kanten- und Eckpunkten zurück
-    //double* SurfacePotential = malloc(sizeof(double));
+double cube(int n){ // Funktion cube nimmt eine bestimmte Seitenlaenge n und gibt die Anzahl an Mittel-, Seiten-, Kanten- und Eckpunkten zurück
     double SurfacePotential = 0;
-    int* Vector3 = malloc(3 * sizeof(int));
-    memset(Vector3, 0, 3 * sizeof(int));
-    int* p = malloc(9 * sizeof(int));
-    p[0]=0;p[1]=1;p[2]=2;p[3]=0;p[4]=1; // pairings for x y z which are used to compact the process of summing up points on the cubes surface
     int sign = 1;
-    for (unsigned int i = 0 ; i<=3 ; i++){
-        Vector3[p[i]] = n;
-        if (n%2 == 1){sign = -1;} // keeping track of the charge of the ions at a lattice point
-            for ( Vector3[p[i+1]] = -n ; Vector3[p[i+1]] <= n ; Vector3[p[i+1]]++){
-                if (Vector3[p[i+1]]%2 == 1){sign = -sign;} 
-                for ( Vector3[p[i+2]] = 1-n ; Vector3[p[i+2]] <= n-1 ; Vector3[p[i+2]]++){
-                    if (Vector3[p[i+2]]%2 == 1){sign = -sign;}
-                    SurfacePotential = SurfacePotential + (sign / sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
-                    //fprintf(stderr,"00 SurfacePotential = %f\n",SurfacePotential);
-                    //fprintf(stderr, "x,y,z = %d %d %d SurfacePotential = %f\n",Vector3[0],Vector3[1],Vector3[2], SurfacePotential);
-                    //fprintf(stderr, "sign = %d   squrt = %f\n",sign, sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
+        int x = n;
+        for (int y=-n ; y<=n ; y++){
+            for (int z=-n ; z<=n ; z++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
                 }
             }
-            if (n%2 == 1){sign = -1;}  else {sign = 1;}
-            SurfacePotential = SurfacePotential + 4 * sign / sqrt(3 * n * n);
-    }
+        x = -n;
+        for (int y=-n ; y<=n ; y++){
+            for (int z=-n ; z<=n ; z++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+                }
+            }
+        int y = n;
+        for (int x=-n+1 ; x<=n-1 ; x++){
+            for (int z=-n ; z<=n ; z++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+                }
+            }
+        y = -n;
+        for (int x=-n+1 ; x<=n-1 ; x++){
+            for (int z=-n ; z<=n ; z++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+                }
+            }
+        int z = n;
+        for (int x=-n+1 ; x<=n-1 ; x++){
+            for (int y=-n+1 ; y<=n-1 ; y++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+                }
+            }
+        z = -n;
+        for (int x=-n+1 ; x<=n-1 ; x++){
+            for (int y=-n+1 ; y<=n-1 ; y++){
+                if (abs(x+y+z)%2 == 0){sign = -1;}else{sign = 1;} // keeping track of the charge of the ions at a lattice point
+                SurfacePotential += (sign / sqrt(x*x + y*y + z*z));
+                }
+            }
+
     return SurfacePotential;
 }
 
 int main(int argc, char **argv){ 
-    unsigned int sidelenght = atof(argv[1]) ;
+    int sidelenght = atof(argv[1]) ;
     fprintf(stderr, "Fuer den Wuerfel mit der Seitenlaenge %d finden wir folgende Punkte. \n", sidelenght);
     //double* VolumePotentioal = malloc(sizeof(double));
     double VolumePotentioal = 0;
-    for (unsigned int n=1 ; n<=sidelenght ; n++){
+    for (int n=1 ; n<=sidelenght ; n++){
         VolumePotentioal = VolumePotentioal + cube(n);//sums 
     }
     fprintf(stderr,"the total potential sum = %f\n", VolumePotentioal);
