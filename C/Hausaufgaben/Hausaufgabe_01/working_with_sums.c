@@ -13,7 +13,7 @@
 #include <string.h>
 
 /**********************************************************
- * Summation over n iterations 
+ * Summation über n Schritte
 **********************************************************/
 double sum(int data[], int length);// this is a superior way to define function, it is more easy to read
 
@@ -21,16 +21,16 @@ double sum(int data[], int length);// this is a superior way to define function,
 * MAIN PROGRAMM
 **********************************************************/
 int main(){
-    int test[] = {1,2,3,4,5,6,7,8,9,0}; 
-    int a = (int)sum(test,10); // trying to cast sum as an int
-    fprintf(stdout, "The sum equals to: %d\n", a);
+    int testArray[] = {1,2,3,4,5,6,7,8,9,0}; // Array definition
+    int typeCastingTest = (int)sum(testArray,10); // Type Casting 
+    fprintf(stdout, "The sum equals to: %d\n", typeCastingTest);
     return 0;
 }
 
-double sum(int data[], int length){ // here i define my function
-    double sum_value = 0; // this is a temporary variable for iterating, it has to be initialzed to have a starting point
-    for(int i = 0 ; i < length ; i++){
-        sum_value = sum_value + data[i];
+double sum(int data[], int length){
+    double sum_value = 0; // Wir definieren uns eine Temporäre Größe wo wir unsere zwischen Ergebnisse immer abspeichern, diese Wert muss auch mit 0 Initialisiert werden.
+    for(int i = 0 ; i < length ; i++){ // Schleife welche unsere Summe bildet
+        sum_value = sum_value + data[i]; // diese Schleife summiert die Werte in einem Array auf
     }
-    return sum_value; // the function return its solution
+    return sum_value; // Rückgabe unserer Ergebnisses 
 }
