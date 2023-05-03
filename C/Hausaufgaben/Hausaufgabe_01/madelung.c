@@ -27,22 +27,20 @@ double cube(unsigned int n){ // Funktion cube nimmt eine bestimmte Seitenlaenge 
     for (unsigned int i = 0 ; i<=3 ; i++){
         Vector3[p[i]] = n;
         if (n%2 == 1){sign = -1;} // keeping track of the charge of the ions at a lattice point
-            for ( Vector3[p[i+1]] = 0 ; Vector3[p[i+1]] <= n ; Vector3[p[i+1]]++){
+            for ( Vector3[p[i+1]] = -n ; Vector3[p[i+1]] <= n ; Vector3[p[i+1]]++){
                 if (Vector3[p[i+1]]%2 == 1){sign = -sign;} 
-                for ( Vector3[p[i+2]] = 0 ; Vector3[p[i+2]] <= n-1 ; Vector3[p[i+2]]++){
+                for ( Vector3[p[i+2]] = 1-n ; Vector3[p[i+2]] <= n-1 ; Vector3[p[i+2]]++){
                     if (Vector3[p[i+2]]%2 == 1){sign = -sign;}
-                    fprintf(stderr, "i,x,y,z = %d %d %d %d\n",i,Vector3[0],Vector3[1],Vector3[2]); 
-                    fprintf(stderr,"SurfacePotential = %f + %f\n",SurfacePotential,sign / sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
                     SurfacePotential = SurfacePotential + (sign / sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
-                    fprintf(stderr,"SurfacePotential = %f\n",SurfacePotential);
+                    //fprintf(stderr,"00 SurfacePotential = %f\n",SurfacePotential);
                     //fprintf(stderr, "x,y,z = %d %d %d SurfacePotential = %f\n",Vector3[0],Vector3[1],Vector3[2], SurfacePotential);
                     //fprintf(stderr, "sign = %d   squrt = %f\n",sign, sqrt(Vector3[0] * Vector3[0] + Vector3[1] * Vector3[1] + Vector3[2] * Vector3[2]));
                 }
             }
             if (n%2 == 1){sign = -1;}  else {sign = 1;}
-            SurfacePotential = SurfacePotential + sign / sqrt(3 * n * n);
+            SurfacePotential = SurfacePotential + 4 * sign / sqrt(3 * n * n);
     }
-    return 8 * SurfacePotential;
+    return SurfacePotential;
 }
 
 int main(int argc, char **argv){ 
