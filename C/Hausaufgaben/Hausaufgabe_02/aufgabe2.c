@@ -10,7 +10,7 @@ typedef struct {
 
 int main() {
     FILE *file;
-    Tuple *tupleList;
+    Tuple *data_points;
     int numLines = range_z * 2 + 1;
 
     // Datei zum Lesen öffnen
@@ -21,16 +21,16 @@ int main() {
     }
 
     // Liste der Tupel erstellen
-    tupleList = (Tuple*)malloc(numLines * sizeof(Tuple));
-    if (tupleList == NULL) {
+    data_points = (Tuple*)malloc(numLines * sizeof(Tuple));
+    if (data_points == NULL) {
         printf("Fehler bei der Speicherzuweisung.\n");
         return 1;
     }
 
     // Datei einlesen und Tupel in die Liste speichern
     for (int i = 0; i < numLines; i++) {
-        if (fscanf(file, "%lf %lf", &(tupleList[i].z_value), &(tupleList[i].potential_value)) != 2) { // doesnt work for line 1
-            printf("Fehler beim Lesen der Datei.\n");
+        if (fscanf(file, "%lf %lf", &(data_points[i].z_value), &(data_points[i].potential_value)) != 2) { // doesnt work for line 1
+            fprintf(stderr,"Fehler beim Lesen der Datei in Zeile %d.\n",i);
             return 1;
         }
     }
@@ -40,11 +40,11 @@ int main() {
 
     // Tupel in der Liste verwenden
     for (int i = 0; i < numLines; i++) {
-        printf("Tupel %d: %.2lf, %.2lf\n", i + 1, tupleList[i].z_value, tupleList[i].potential_value);
+        printf("Tupel %d: %.2lf, %.2lf\n", i + 1, data_points[i].z_value, data_points[i].potential_value);
     }
 
     // Speicher freigeben
-    free(tupleList);
+    free(data_points);
 
     return 0;
 }
