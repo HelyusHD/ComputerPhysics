@@ -13,17 +13,10 @@
 #include <string.h>
 #include <math.h>
 
-char *filename_read = "potential.txt";
+char *filename_write01 = "potential.txt";
 
 typedef double (*func_type ) ( double const x, void * p );
 // we define a typ, which contains the information of our function 
-
-double trapez ( func_type f, double const x1, double const x2, void * p ) 
-{
-
-  return( ( f(x1, p) + f(x2, p) ) * 0.5 * ( x1 - x2 ) );
-
-} // this funtionthe uses the trapez mathod to devide our function into trapez intrapolations
 
 double trapez_integration ( func_type f, double const xa, double const xe, double const h, void * p )
 {
@@ -107,7 +100,7 @@ int main(int argc, char **argv)
   double p[] = {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1};
 
   for(unsigned int l= 1; l <= 4; l++){ // for loop to vary over a 
-    FILE * fp = fopen ( filename_read, "a" );
+    FILE * fp = fopen ( filename_write01, "a" );
     p[3]= 0.1*(l*5);
     //printf("a=%f\n",p[3]);
     fprintf(fp, "%f\n", p[3]);
