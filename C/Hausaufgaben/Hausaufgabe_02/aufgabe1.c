@@ -13,6 +13,8 @@
 #include <string.h>
 #include <math.h>
 
+char *filename_read = "potential.txt";
+
 typedef double (*func_type ) ( double const x, void * p );
 // we define a typ, which contains the information of our function 
 
@@ -104,17 +106,15 @@ int main(int argc, char **argv)
 
   double p[] = {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1};
 
-  char *filename = "potential.txt";
-
   for(unsigned int l= 1; l <= 4; l++){ // for loop to vary over a 
-    FILE * fp = fopen ( filename, "a" );
+    FILE * fp = fopen ( filename_read, "a" );
     p[3]= 0.1*(l*5);
-    printf("a=%f\n",p[3]);
+    //printf("a=%f\n",p[3]);
     fprintf(fp, "%f\n", p[3]);
     for(int j = -200 ; j <= 200 ; j++){ // for loop to vary over z
 
       p[4] = 0.01*j;
-      printf("%f ",p[4]);
+      //printf("%f ",p[4]);
 
 
     double xa = 0.;                /* untere Intervallgrenze */
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
         //write integral value to new variable
 
       }
-       printf("%f\n", val_old);
+      //printf("%f\n", val_old);
       fprintf(fp, "%f  %f\n",p[4] , val_old);
       
     } 

@@ -73,7 +73,7 @@ int main() {
 
     FILE * fp = fopen ( filename_write, "a" );
 
-    for (int i = 0; i < numLines - 1 ; i++) {
+    for (int i = 1; i < numLines - 1 ; i++) { //ignore first line, so we start at i = 1
         double electric_field = deriv_sym_1(h ,data_points[i].potential_value ,data_points[i+1].potential_value);
         fprintf(fp ,"%f   %f\n" ,data_points[i].z_value ,electric_field);
     }
