@@ -2,10 +2,10 @@
  *
  * compile with
  *
- *   gcc -Wall -pedantic aufgabe1.c -o aufgabe1 -lm
+ *   gcc -Wall -pedantic aufgabe1_copy.c -o aufgabe1_copy -lm
  *
  * run with
- *   ./aufgabe1
+ *   ./aufgabe1_copy
  *
  ***********************************************************************/
 #include <stdlib.h>
@@ -13,7 +13,6 @@
 #include <string.h>
 #include <math.h>
 
-char *filename_write01 = "potential.txt";
 
 typedef double (*func_type ) ( double const x, void * p );
 // we define a typ, which contains the information of our function 
@@ -90,24 +89,19 @@ double Ladungsdichte (double x, void * p)
   return( faktor * alpha * q/a * exp (-pow(x,2)/pow(a,2))/sqrt(pow(x,2)+pow(z,2)));
 }
 
-/***********************************************************************
- * Hauptprogramm
- ***********************************************************************/
-int main(int argc, char **argv) 
-{
-  func_type f = Ladungsdichte;
+//call integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200., 2.) // interval_lenght == distance from 0
 
-  double p[] = {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1};
+int integral(func_type f, double p[], char *filename_write, double interval_steps, double interval_lenght){
 
-  for(unsigned int l= 1; l <= 4; l++){ // for loop to vary over a 
-    FILE * fp = fopen ( filename_write01, "a" );
-    p[3]= 0.1*(l*5);
-    //printf("a=%f\n",p[3]);
-    fprintf(fp, "%f\n", p[3]);
-    for(int j = -200 ; j <= 200 ; j++){ // for loop to vary over z
+  FILE * fp = fopen ( filename_write, "a" );
 
-      p[4] = 0.01*j;
-      //printf("%f ",p[4]);
+  //fprintf(fp, "%f\n", p[3]); //only used for debuging
+
+  for(int j = -interval_steps ; j <= interval_steps ; j++){ // for loop to vary over z
+
+  //fprintf(stderr,"%d",interval_steps);
+
+      p[4] = interval_lenght / interval_steps*j;
 
 
     double xa = 0.;                /* untere Intervallgrenze */
@@ -187,12 +181,70 @@ int main(int argc, char **argv)
       
     } 
     fclose(fp); 
-  }
+  
   /* Speicher freigeben
   * free ( x_old );
   * free ( y_old );
   */
-  return ( 0 );
+  return 0;
+}
+
+// aproximates the derivitive at a point using the difference quotient
+double derivative(func_type f, double z, const double thicknes)
+{
+    double del = 0.25; // init detha z
+    double drivtv = 0.; // init
+    double relative_error = 1.;
+    int n = 0;
+
+    while (relative_error > 1.e-08)
+    {
+        if ( (z - del) == 0. || z + del == 12.)
+        {
+            del *= 0.5;
+        }
+        else
+        {
+            double drivtv_old = drivtv;
+
+            //double p1[2] = { z - del,thicknes };
+            double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , 0.1};
+            //double p2[2] = { z + del,thicknes };
+            double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , 0.1};
+
+            drivtv = -(integral(f, p_2) - integral(f, p_1)) / (2 * del); // this is the classical difference quotient
+            del *= 0.5;
+            relative_error = fabs(drivtv_old - drivtv);
+            ++n;
+        }
+    }
+    return drivtv;
+}
+
+
+
+
+
+/***********************************************************************
+ * Hauptprogramm
+ ***********************************************************************/
+int main(int argc, char **argv)
+{
+  // create potential values on the z axis for 3 different "a" parameters
+
+  //              const alpha        charge  a     _    
+  double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    0.5 , 0.1};
+  double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    1.0 , 0.1};
+  double p_3[] = {1.0 , sqrt(M_PI) , 1.0,    1.5 , 0.1};
+  double p_4[] = {1.0 , sqrt(M_PI) , 1.0,    2.0 , 0.1};
+  integral(Ladungsdichte, p_1, "potential_1.txt", 200., 2.);
+  integral(Ladungsdichte, p_2, "potential_2.txt", 200., 2.);
+  integral(Ladungsdichte, p_3, "potential_3.txt", 200., 2.);
+  integral(Ladungsdichte, p_4, "potential_4.txt", 200., 2.);
+
+  //         function_name  z  thicknes
+  derivative(Ladungsdichte, 1, 0.5);
+  return 0 ;
 }
 
 /*DINGE DIE ICH AM CODE VERBESSERN MÖCHTE

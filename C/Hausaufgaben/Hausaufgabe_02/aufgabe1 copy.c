@@ -91,17 +91,19 @@ double Ladungsdichte (double x, void * p)
 
 //call integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200., 2.) // interval_lenght == distance from 0
 
-int integral(func_type f, double p[], char *filename_write, double interval_steps, double interval_lenght){
+int integral(func_type f, double p[], char *filename_write)
+{
 
   FILE * fp = fopen ( filename_write, "a" );
 
   //fprintf(fp, "%f\n", p[3]); //only used for debuging
 
-  for(int j = -interval_steps ; j <= interval_steps ; j++){ // for loop to vary over z
+  //for(int j = -interval_steps ; j <= interval_steps ; j++) // for loop to vary over z
+  //{
 
-  //fprintf(stderr,"%d",interval_steps);
+    //fprintf(stderr,"%d",interval_steps);
 
-      p[4] = interval_lenght / interval_steps*j;
+      //p[4] = interval_lenght / interval_steps*j;
 
 
     double xa = 0.;                /* untere Intervallgrenze */
@@ -139,54 +141,85 @@ int integral(func_type f, double p[], char *filename_write, double interval_step
       x_old[i] = h;
     }
 
-      /* erster Romberg-Integrationswert mit nstep = nstep_min */
-      double val_old = neville ( y_old, x_old , nstep );
+    /* erster Romberg-Integrationswert mit nstep = nstep_min */
+    double val_old = neville ( y_old, x_old , nstep );
 
-      while ( nstep <= nstep_max && ( diffrel > epsrel || diffabs > epsabs ) ) 
-      {
+    while ( nstep <= nstep_max && ( diffrel > epsrel || diffabs > epsabs ) ) 
+    {
 
-        nstep++;
+      nstep++;
 
-        y_old = (double*) realloc( y_old, ( nstep + 1 ) * sizeof( double ) );
-        x_old = (double*) realloc( x_old, ( nstep + 1 ) * sizeof( double ) );
-        // we use realloc to write every newstep into our arrays
-
-
-        double const xan = xa + h / 2.;
-        double const xen = xe - h / 2.;
-        // here we define our new integral
-
-        y_old[nstep] = 0.5 * ( y_old[nstep-1] + trapez_integration_restarted ( f, xan, xen, h, (void*)p ) );
-        // we add points in between our old points
+      y_old = (double*) realloc( y_old, ( nstep + 1 ) * sizeof( double ) );
+      x_old = (double*) realloc( x_old, ( nstep + 1 ) * sizeof( double ) );
+      // we use realloc to write every newstep into our arrays
 
 
-        h *= 0.5;
-        x_old[nstep] = h;
-        // we shorten our stepwidth
+      double const xan = xa + h / 2.;
+      double const xen = xe - h / 2.;
+      // here we define our new integral
 
-        double val = neville ( y_old, x_old, nstep );
-        // we use neville to extrapolate our step width to h approach 0
+      y_old[nstep] = 0.5 * ( y_old[nstep-1] + trapez_integration_restarted ( f, xan, xen, h, (void*)p ) );
+      // we add points in between our old points
 
 
-        diffabs = fabs( val_old - val );
-        diffrel = diffabs / fabs( val_old + val ) * 2.;
-        // we calculate our error
+      h *= 0.5;
+      x_old[nstep] = h;
+      // we shorten our stepwidth
 
-        val_old = val;
-        //write integral value to new variable
+      double val = neville ( y_old, x_old, nstep );
+      // we use neville to extrapolate our step width to h approach 0
 
-      }
-      //printf("%f\n", val_old);
-      fprintf(fp, "%f  %f\n",p[4] , val_old);
+
+      diffabs = fabs( val_old - val );
+      diffrel = diffabs / fabs( val_old + val ) * 2.;
+      // we calculate our error
+
+      val_old = val;
+      //write integral value to new variable
+
+    }
+    //printf("%f\n", val_old);
+    fprintf(fp, "%f  %f\n",p[4] , val_old);
       
-    } 
+  //} 
     fclose(fp); 
   
-  /* Speicher freigeben
-  * free ( x_old );
-  * free ( y_old );
-  */
+  // Speicher freigeben
+  free ( x_old );
+  free ( y_old );
   return 0;
+}
+
+// aproximates the derivitive at a fixed point/distance "z" using the difference quotient
+double derivative(func_type f, double z, const double thicknes)
+{
+    double del = 0.25; // init delta z
+    double drivtv = 0.; // init
+    double relative_error = 1.;
+    int n = 0;
+
+    while (relative_error > 1.e-08)
+    {
+        if ( (z - del) == 0. || z + del == 12.)
+        {
+            del *= 0.5;
+        }
+        else
+        {
+            double drivtv_old = drivtv;
+
+            //double p1[2] = { z - del,thicknes };
+            double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , z - del};
+            //double p2[2] = { z + del,thicknes };
+            double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , z - del};
+
+            drivtv = -(integral(f, p_2,"garbege") - integral(f, p_1,"garbege")) / (2 * del); // this is the classical difference quotient
+            del *= 0.5;
+            relative_error = fabs(drivtv_old - drivtv);
+            ++n;
+        }
+    }
+    return drivtv;
 }
 
 
@@ -199,15 +232,32 @@ int integral(func_type f, double p[], char *filename_write, double interval_step
 int main(int argc, char **argv)
 {
   // create potential values on the z axis for 3 different "a" parameters
-  double p_1[] = {1.0 , sqrt(M_PI) , 1.0, 0.5 , 0.1};
-  double p_2[] = {1.0 , sqrt(M_PI) , 1.0, 1.0 , 0.1};
-  double p_3[] = {1.0 , sqrt(M_PI) , 1.0, 1.5 , 0.1};
-  double p_4[] = {1.0 , sqrt(M_PI) , 1.0, 2.0 , 0.1};
-  integral(Ladungsdichte, p_1, "potential_1.txt", 200., 2.);
-  integral(Ladungsdichte, p_2, "potential_2.txt", 200., 2.);
-  integral(Ladungsdichte, p_3, "potential_3.txt", 200., 2.);
-  integral(Ladungsdichte, p_4, "potential_4.txt", 200., 2.);
 
+  //              const alpha        charge  a     _    
+  double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    0.5 , 0.1};
+  double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    1.0 , 0.1};
+  double p_3[] = {1.0 , sqrt(M_PI) , 1.0,    1.5 , 0.1};
+  double p_4[] = {1.0 , sqrt(M_PI) , 1.0,    2.0 , 0.1};
+
+  double const interval_steps = 200.;
+  double const interval_lenght = 2.;
+  for(int j = -interval_steps ; j <= interval_steps ; j++){ // for loop to vary over z
+
+    //p[4] is the z value
+    p_1[4] = interval_lenght / interval_steps*j;
+    p_2[4] = interval_lenght / interval_steps*j;
+    p_3[4] = interval_lenght / interval_steps*j;
+    p_4[4] = interval_lenght / interval_steps*j;
+
+    integral(Ladungsdichte, p_1, "potential_1.txt");
+    integral(Ladungsdichte, p_2, "potential_2.txt");
+    integral(Ladungsdichte, p_3, "potential_3.txt");
+    integral(Ladungsdichte, p_4, "potential_4.txt");
+  }
+
+  //         function_name  z  thicknes
+  double val01 = derivative(Ladungsdichte, 1, 0.5);
+  fprintf(stderr,"%f",val01);
   return 0 ;
 }
 
