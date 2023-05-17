@@ -5,7 +5,7 @@
  *   gcc -Wall -pedantic aufgabe1_copy.c -o aufgabe1_copy -lm
  *
  * run with
- *   ./aufgabe1
+ *   ./aufgabe1_copy
  *
  ***********************************************************************/
 #include <stdlib.h>
@@ -89,15 +89,17 @@ double Ladungsdichte (double x, void * p)
   return( faktor * alpha * q/a * exp (-pow(x,2)/pow(a,2))/sqrt(pow(x,2)+pow(z,2)));
 }
 
-//call integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200, 2) // interval_lenght == distance from 0
+//call integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200., 2.) // interval_lenght == distance from 0
 
-void integral(func_type f, double p[], char *filename_write, int interval_steps, int interval_lenght){
+int integral(func_type f, double p[], char *filename_write, double interval_steps, double interval_lenght){
 
   FILE * fp = fopen ( filename_write, "a" );
 
   fprintf(fp, "%f\n", p[3]);
 
   for(int j = -interval_steps ; j <= interval_steps ; j++){ // for loop to vary over z
+
+  //fprintf(stderr,"%d",interval_steps);
 
       p[4] = interval_lenght / interval_steps*j;
 
@@ -184,6 +186,7 @@ void integral(func_type f, double p[], char *filename_write, int interval_steps,
   * free ( x_old );
   * free ( y_old );
   */
+  return 0;
 }
 
 
@@ -193,9 +196,10 @@ void integral(func_type f, double p[], char *filename_write, int interval_steps,
 /***********************************************************************
  * Hauptprogramm
  ***********************************************************************/
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
-  integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200, 2);
+  double p[] = {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1};
+  integral(Ladungsdichte, p, "potential.txt", 200., 2.);
 
   return 0 ;
 }
