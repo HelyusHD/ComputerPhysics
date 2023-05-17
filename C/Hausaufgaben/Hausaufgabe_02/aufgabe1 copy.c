@@ -95,7 +95,7 @@ int integral(func_type f, double p[], char *filename_write, double interval_step
 
   FILE * fp = fopen ( filename_write, "a" );
 
-  fprintf(fp, "%f\n", p[3]);
+  //fprintf(fp, "%f\n", p[3]); //only used for debuging
 
   for(int j = -interval_steps ; j <= interval_steps ; j++){ // for loop to vary over z
 
@@ -198,8 +198,15 @@ int integral(func_type f, double p[], char *filename_write, double interval_step
  ***********************************************************************/
 int main(int argc, char **argv)
 {
-  double p[] = {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1};
-  integral(Ladungsdichte, p, "potential.txt", 200., 2.);
+  // create potential values on the z axis for 3 different "a" parameters
+  double p_1[] = {1.0 , sqrt(M_PI) , 1.0, 0.5 , 0.1};
+  double p_2[] = {1.0 , sqrt(M_PI) , 1.0, 1.0 , 0.1};
+  double p_3[] = {1.0 , sqrt(M_PI) , 1.0, 1.5 , 0.1};
+  double p_4[] = {1.0 , sqrt(M_PI) , 1.0, 2.0 , 0.1};
+  integral(Ladungsdichte, p_1, "potential_1.txt", 200., 2.);
+  integral(Ladungsdichte, p_2, "potential_2.txt", 200., 2.);
+  integral(Ladungsdichte, p_3, "potential_3.txt", 200., 2.);
+  integral(Ladungsdichte, p_4, "potential_4.txt", 200., 2.);
 
   return 0 ;
 }
