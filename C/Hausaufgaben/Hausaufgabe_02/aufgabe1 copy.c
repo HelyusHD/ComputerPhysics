@@ -89,22 +89,12 @@ double Ladungsdichte (double x, void * p)
   return( faktor * alpha * q/a * exp (-pow(x,2)/pow(a,2))/sqrt(pow(x,2)+pow(z,2)));
 }
 
-//call integral(Ladungsdichte, {1.0 , sqrt(M_PI) , 1.0, .5 , 0.1}, "potential.txt", 200., 2.) // interval_lenght == distance from 0
+
 
 int integral(func_type f, double p[], char *filename_write)
 {
 
   FILE * fp = fopen ( filename_write, "a" );
-
-  //fprintf(fp, "%f\n", p[3]); //only used for debuging
-
-  //for(int j = -interval_steps ; j <= interval_steps ; j++) // for loop to vary over z
-  //{
-
-    //fprintf(stderr,"%d",interval_steps);
-
-      //p[4] = interval_lenght / interval_steps*j;
-
 
     double xa = 0.;                /* untere Intervallgrenze */
     double xe = 100.;              /* obere Intervallgrenze  */
@@ -193,30 +183,27 @@ int integral(func_type f, double p[], char *filename_write)
 // aproximates the derivitive at a fixed point/distance "z" using the difference quotient
 double derivative(func_type f, double z, const double thicknes)
 {
-    double del = 0.25; // init delta z
+    double del = 0.5; // init delta z
     double drivtv = 0.; // init
     double relative_error = 1.;
-    int n = 0;
 
     while (relative_error > 1.e-08)
     {
-        if ( (z - del) == 0. || z + del == 12.)
+        if ( (z - del) == 0. || z + del == 0.)
         {
             del *= 0.5;
+            fprintf(stderr,"here\n");
         }
         else
         {
             double drivtv_old = drivtv;
+            double p_1[] = {1.0 , sqrt(M_PI) , 1.0, thicknes , z - del};
+            double p_2[] = {1.0 , sqrt(M_PI) , 1.0, thicknes , z + del};
 
-            //double p1[2] = { z - del,thicknes };
-            double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , z - del};
-            //double p2[2] = { z + del,thicknes };
-            double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , z - del};
-
-            drivtv = -(integral(f, p_2,"garbege") - integral(f, p_1,"garbege")) / (2 * del); // this is the classical difference quotient
+            drivtv = (integral(f, p_2,"garbege.txt") - integral(f, p_1,"garbege.txt")) / (2 * del); // this is the classical difference quotient
             del *= 0.5;
             relative_error = fabs(drivtv_old - drivtv);
-            ++n;
+            fprintf(stderr,"%f\n",relative_error);
         }
     }
     return drivtv;
@@ -233,7 +220,7 @@ int main(int argc, char **argv)
 {
   // create potential values on the z axis for 3 different "a" parameters
 
-  //              const alpha        charge  a     _    
+  //              const alpha        charge  a     z    
   double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    0.5 , 0.1};
   double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    1.0 , 0.1};
   double p_3[] = {1.0 , sqrt(M_PI) , 1.0,    1.5 , 0.1};
@@ -256,8 +243,8 @@ int main(int argc, char **argv)
   }
 
   //         function_name  z  thicknes
-  double val01 = derivative(Ladungsdichte, 1, 0.5);
-  fprintf(stderr,"%f",val01);
+  double val01 = derivative(Ladungsdichte, 1, 0.1);
+  fprintf(stderr,"%f\n",val01);
   return 0 ;
 }
 

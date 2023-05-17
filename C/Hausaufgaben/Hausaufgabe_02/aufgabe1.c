@@ -195,7 +195,6 @@ double derivative(func_type f, double z, const double thicknes)
     double del = 0.25; // init detha z
     double drivtv = 0.; // init
     double relative_error = 1.;
-    int n = 0;
 
     while (relative_error > 1.e-08)
     {
@@ -208,14 +207,14 @@ double derivative(func_type f, double z, const double thicknes)
             double drivtv_old = drivtv;
 
             //double p1[2] = { z - del,thicknes };
-            double p_1[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , 0.1};
+            double p_1[] = {1.0 , sqrt(M_PI) , 1.0, thicknes , 0.1};
             //double p2[2] = { z + del,thicknes };
-            double p_2[] = {1.0 , sqrt(M_PI) , 1.0,    thicknes , 0.1};
+            double p_2[] = {1.0 , sqrt(M_PI) , 1.0, thicknes , 0.1};
 
             drivtv = -(integral(f, p_2) - integral(f, p_1)) / (2 * del); // this is the classical difference quotient
             del *= 0.5;
             relative_error = fabs(drivtv_old - drivtv);
-            ++n;
+            fprintf(stderr,"%f\n",relative_error);
         }
     }
     return drivtv;
@@ -241,9 +240,9 @@ int main(int argc, char **argv)
   integral(Ladungsdichte, p_2, "potential_2.txt", 200., 2.);
   integral(Ladungsdichte, p_3, "potential_3.txt", 200., 2.);
   integral(Ladungsdichte, p_4, "potential_4.txt", 200., 2.);
-
+  
   //         function_name  z  thicknes
-  derivative(Ladungsdichte, 1, 0.5);
+  derivative(Ladungsdichte, 1, 0.1);
   return 0 ;
 }
 
