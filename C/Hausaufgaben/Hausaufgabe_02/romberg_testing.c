@@ -121,7 +121,7 @@ double trapez_integration_restarted ( func_type f, double const xa, double const
  * Neville-Schema fuer Polynom-Interpolation,
  *
  * Eingabe:
- *   y = Sützordinaten, hier die Trapezintegrale
+ *   y = Stützordinaten, hier die Trapezintegrale
  *   x = Stützwerte, hier die Liste der Schrittweiten
  *   m = Anzahl der Schrittweiten = Länge von y = Länge von x
  *
