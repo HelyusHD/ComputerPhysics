@@ -2,6 +2,8 @@
 #include <stdlib.h>
 
 int const range_z = 200;
+char const file_name ='potential.txt';
+
 
 typedef struct {
     double z_value;
@@ -14,7 +16,7 @@ int main() {
     int numLines = range_z * 2 + 1;
 
     // Datei zum Lesen öffnen
-    file = fopen("potential.txt", "r");
+    file = fopen(file_name, "r");
     if (file == NULL) {
         printf("Fehler beim Öffnen der Datei.\n");
         return 1;
