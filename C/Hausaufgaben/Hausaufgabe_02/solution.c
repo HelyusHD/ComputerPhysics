@@ -187,12 +187,14 @@ double derivative(func_type f, double z, const double thicknes)
     double drivtv = 0.; // init
     double relative_error = 1.;
 
-    while (relative_error > 1.e-08)
+    fprintf(stderr,"here01\n");
+    while (relative_error > 1.e-02)
     {
         if ( (z - del) == 0. || z + del == 0.)
         {
             del *= 0.5;
-            fprintf(stderr,"here\n");
+            fprintf(stderr,"here02\n");
+            printf("here03");
         }
         else
         {
@@ -204,6 +206,7 @@ double derivative(func_type f, double z, const double thicknes)
             del *= 0.5;
             relative_error = fabs(drivtv_old - drivtv);
             fprintf(stderr,"%f\n",relative_error);
+            fprintf(stderr,"here04\n");
         }
     }
     return drivtv;
@@ -242,9 +245,9 @@ int main(int argc, char **argv)
     integral(Ladungsdichte, p_4, "potential_4.txt");
   }
 
-  //         function_name  z  thicknes
-  double val01 = derivative(Ladungsdichte, 1, 0.1);
-  fprintf(stderr,"%f\n",val01);
+  //                        function_name  z  thicknes
+  double val01 = derivative(Ladungsdichte, 1., 0.1);
+  fprintf(stderr,"Die Ableitung des Potentiales im Abstand 1\nzum Leiter der Dicke 0.1, ist\n%f\n",val01);
   return 0 ;
 }
 
